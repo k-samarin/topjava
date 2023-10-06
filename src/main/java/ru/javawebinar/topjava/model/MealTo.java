@@ -5,6 +5,22 @@ import java.time.LocalDateTime;
 public class MealTo {
     private final LocalDateTime dateTime;
 
+    public String getDescription() {
+        return description;
+    }
+
+    public int getCalories() {
+        return calories;
+    }
+
+    public boolean isExcess() {
+        return excess;
+    }
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
     private final String description;
 
     private final int calories;

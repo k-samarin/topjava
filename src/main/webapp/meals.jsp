@@ -17,21 +17,26 @@
     <h3><a href="index.html">Home</a></h3>
     <hr>
     <h2>Meals</h2>
+        <p><a href="?action=insert">Add meal</a></p>
     <table style="width:100%">
         <thead>
             <tr>
                 <th>Date</th>
                 <th>Description</th>
                 <th>Calories</th>
+                <th colspan=2>Action</th>
             </tr>
         </thead>
         </tbody>
             <c:forEach var="meal" items="${meals}">
                 <fmt:parseDate value="${meal.dateTime}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
-                <tr class="${meal.isExcess() ? 'red' : 'green'}">
+                <tr class="${meal.excess ? 'red' : 'green'}">
+                    <td style="display:none;">${meal.id}</td>
                     <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${parsedDateTime}"/></td>
                     <td>${meal.description}</td>
                     <td>${meal.calories}</td>
+                    <td><a href="?action=edit&id=${meal.id}">Update</a></td>
+                    <td><a href="?action=delete&id=${meal.id}">Delete</a></td>
                 </tr>
             </c:forEach>
         </tbody>

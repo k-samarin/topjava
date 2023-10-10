@@ -3,15 +3,14 @@ package ru.javawebinar.topjava.model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-
 public class Meal {
-    private final LocalDateTime dateTime;
+    private LocalDateTime dateTime;
+    private String description;
+    private int calories;
+    private final int id;
 
-    private final String description;
-
-    private final int calories;
-
-    public Meal(LocalDateTime dateTime, String description, int calories) {
+    public Meal(int id, LocalDateTime dateTime, String description, int calories) {
+        this.id = id;
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
@@ -21,12 +20,26 @@ public class Meal {
         return dateTime;
     }
 
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
+
     public String getDescription() {
         return description;
     }
 
+    public void setDescription(String description) {
+        if (description != null) {
+            this.description = description;
+        }
+    }
+
     public int getCalories() {
         return calories;
+    }
+
+    public void setCalories(int calories) {
+        this.calories = calories;
     }
 
     public LocalDate getDate() {
@@ -35,5 +48,9 @@ public class Meal {
 
     public LocalTime getTime() {
         return dateTime.toLocalTime();
+    }
+
+    public int getId() {
+        return id;
     }
 }

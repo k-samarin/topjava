@@ -42,14 +42,11 @@ public class MemoryMealRepository implements MealRepository {
     @Override
     public Meal update(Meal meal) {
         Integer mealIdToReplace = meal.getId();
-        Meal m = meals.get(mealIdToReplace);
-        if (m != null) {
-            if (meals.replace(
-                    mealIdToReplace,
-                    m,
-                    new Meal(mealIdToReplace, meal.getDateTime(), meal.getDescription(), meal.getCalories()))) {
-                return new Meal(mealIdToReplace, m.getDateTime(), m.getDescription(), m.getCalories());
-            }
+        Meal oldMeal = meals.replace(
+                mealIdToReplace,
+                new Meal(mealIdToReplace, meal.getDateTime(), meal.getDescription(), meal.getCalories()));
+        if (oldMeal != null) {
+            return new Meal(mealIdToReplace, meal.getDateTime(), meal.getDescription(), meal.getCalories());
         }
         return null;
     }

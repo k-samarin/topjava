@@ -27,11 +27,10 @@
                 <th colspan=2>Action</th>
             </tr>
         </thead>
-        </tbody>
+        <tbody>
             <c:forEach var="meal" items="${meals}">
                 <fmt:parseDate value="${meal.dateTime}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
                 <tr class="${meal.excess ? 'red' : 'green'}">
-                    <td style="display:none;">${meal.id}</td>
                     <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${parsedDateTime}"/></td>
                     <td>${meal.description}</td>
                     <td>${meal.calories}</td>

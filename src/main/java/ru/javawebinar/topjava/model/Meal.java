@@ -3,13 +3,14 @@ package ru.javawebinar.topjava.model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+
 public class Meal {
+    private final Integer id;
     private LocalDateTime dateTime;
     private String description;
     private int calories;
-    private final int id;
 
-    public Meal(int id, LocalDateTime dateTime, String description, int calories) {
+    public Meal(Integer id, LocalDateTime dateTime, String description, int calories) {
         this.id = id;
         this.dateTime = dateTime;
         this.description = description;
@@ -29,9 +30,7 @@ public class Meal {
     }
 
     public void setDescription(String description) {
-        if (description != null) {
-            this.description = description;
-        }
+        this.description = description;
     }
 
     public int getCalories() {

@@ -3,7 +3,8 @@ package ru.javawebinar.topjava.web;
 import org.slf4j.Logger;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.MealTo;
-import ru.javawebinar.topjava.model.MemoryMealUpdater;
+import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.repository.MemoryMealRepository;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import javax.servlet.ServletException;
@@ -15,60 +16,52 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = getLogger(MealServlet.class);
-    private static final MemoryMealUpdater mmu = MemoryMealUpdater.getInstance();
-    static final String MEALS_LIST = "/meals.jsp";
-    static final String MEAL_FORM = "/meal.jsp";
+    private static final MealRepository mealRepository = new MemoryMealRepository();
+    private static final String MEALS_LIST = "/meals.jsp";
+    private static final String MEAL_FORM = "/meal.jsp";
+    private static final int CALORIES_PER_DAY_LIMIT = 2000;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String forwardTo = MEALS_LIST;
-        String action = request.getParameter("action");
-        log.debug(String.format("redirect to list of meals with action %s", action));
-        if (action != null) {
-            switch (action.toLowerCase()) {
-                case ("insert"): {
-                    forwardTo = MEAL_FORM;
-                    break;
-                }
-                case ("edit"): {
-                    int id = Integer.parseInt(request.getParameter("id"));
-                    Meal m = mmu.getMealById(id);
-                    if (m != null) {
-                        request.setAttribute("id", id);
-                        request.setAttribute("datetime", m.getDateTime());
-                        request.setAttribute("description", m.getDescription());
-                        request.setAttribute("calories", m.getCalories());
-                        forwardTo = MEAL_FORM;
-                    } else {
-                        log.debug(String.format("Meal with id %s not found", action));
-                    }
-                    break;
-                }
-                case ("delete"): {
-                    int id = Integer.parseInt(request.getParameter("id"));
-                    log.debug(String.format("remove Meal with id: %s ", id));
-                    mmu.remove(id);
-                    break;
-                }
-                default: {
-                    // Do nothing for now.
-                }
+        String action = request.getParameter("action") != null ? request.getParameter("action") : "unknown";
+        log.debug("redirect to list of meals with action {}", action);
+        switch (action.toLowerCase()) {
+            case ("insert"): {
+                forwardTo = MEAL_FORM;
+                break;
             }
-        }
+            case ("edit"): {
+                int id = Integer.parseInt(request.getParameter("id"));
+                Meal m = mealRepository.getById(id);
+                if (m != null) {
+                    request.setAttribute("meal", m);
+                    forwardTo = MEAL_FORM;
+                } else {
+                    log.debug("Meal with id {} not found", id);
+                }
+                break;
+            }
+            case ("delete"): {
+                int id = Integer.parseInt(request.getParameter("id"));
+                log.debug("remove Meal with id: {} ", id);
+                mealRepository.remove(id);
+            }
+            default: {
+                List<MealTo> meals = MealsUtil.filteredByStreams(
+                        mealRepository.getAll(),
+                        LocalTime.MIN,
+                        LocalTime.MAX,
+                        CALORIES_PER_DAY_LIMIT);
 
-        if (forwardTo.equals(MEALS_LIST)) {
-            List<MealTo> meals = MealsUtil.filteredByStreams(
-                    mmu.getMeals(),
-                    LocalTime.MIN,
-                    LocalTime.MAX,
-                    2000);
-
-            request.setAttribute("meals", meals);
+                request.setAttribute("meals", meals);
+            }
         }
 
         request.getRequestDispatcher(forwardTo).forward(request, response);
@@ -76,21 +69,20 @@ public class MealServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        int id = request.getParameter("id") == null ? -1 : Integer.parseInt(request.getParameter("id"));
+        Integer id = request.getParameter("id") == null ? null : Integer.parseInt(request.getParameter("id"));
         LocalDateTime datetime = LocalDateTime.parse(request.getParameter("datetime"));
         String description = request.getParameter("description");
         int calories = Integer.parseInt(request.getParameter("calories"));
-        if (id < 0) {
-            mmu.add(datetime, description, calories);
+        if (id == null) {
+            log.debug("redirect to add meal");
+            mealRepository.add(new Meal(null, datetime, description, calories));
         } else {
-            mmu.update(id, datetime, description, calories);
+            log.debug("redirect to update meal id: {}", id);
+            mealRepository.update(new Meal(id, datetime, description, calories));
         }
 
-        List<MealTo> meals = MealsUtil.filteredByStreams(
-                mmu.getMeals(),
-                LocalTime.MIN,
-                LocalTime.MAX,
-                2000);
+        List<MealTo> meals =
+                MealsUtil.filteredByStreams(mealRepository.getAll(), LocalTime.MIN, LocalTime.MAX, CALORIES_PER_DAY_LIMIT);
 
         request.setAttribute("meals", meals);
         request.getRequestDispatcher(MEALS_LIST).forward(request, response);

@@ -4,14 +4,16 @@ import ru.javawebinar.topjava.model.Meal;
 
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 public class MemoryMealRepository implements MealRepository {
     private final AtomicInteger idCounter = new AtomicInteger(0);
-    private final ConcurrentHashMap<Integer, Meal> meals = new ConcurrentHashMap<>();
+    private final Map<Integer, Meal> meals = new ConcurrentHashMap<>();
 
     public MemoryMealRepository() {
         // Test collection initialisation.
@@ -39,13 +41,17 @@ public class MemoryMealRepository implements MealRepository {
 
     @Override
     public Meal update(Meal meal) {
-        Meal m = meals.get(meal.getId());
-        synchronized (m) {
-            m.setDateTime(meal.getDateTime());
-            m.setDescription(meal.getDescription());
-            m.setCalories(meal.getCalories());
+        Integer mealIdToReplace = meal.getId();
+        Meal m = meals.get(mealIdToReplace);
+        if (m != null) {
+            if (meals.replace(
+                    mealIdToReplace,
+                    m,
+                    new Meal(mealIdToReplace, meal.getDateTime(), meal.getDescription(), meal.getCalories()))) {
+                return new Meal(mealIdToReplace, m.getDateTime(), m.getDescription(), m.getCalories());
+            }
         }
-        return new Meal(m.getId(), m.getDateTime(), m.getDescription(), m.getCalories());
+        return null;
     }
 
     @Override

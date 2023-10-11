@@ -11,13 +11,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Predicate;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -80,7 +77,9 @@ public class MealServlet extends HttpServlet {
             mealRepository.add(new Meal(null, datetime, description, calories));
         } else {
             log.debug("redirect to update meal id: {}", id);
-            mealRepository.update(new Meal(id, datetime, description, calories));
+            if (null == mealRepository.update(new Meal(id, datetime, description, calories))) {
+                log.debug("update is failed as of meal id: {} not found", id);
+            }
         }
 
         response.sendRedirect(request.getContextPath() + MEALS_LIST_URL);

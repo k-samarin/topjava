@@ -31,7 +31,7 @@ public class MealServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String action = request.getParameter("action") == null ? "" : request.getParameter("action");
+        String action = request.getParameter("action") == null ? "noAction" : request.getParameter("action");
         log.debug("redirect to list of meals with action {}", action);
         switch (action) {
             case ("insert"): {

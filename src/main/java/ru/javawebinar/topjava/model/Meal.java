@@ -18,10 +18,7 @@ public class Meal {
     }
 
     public Meal(Meal meal) {
-        this.id = meal.getId();
-        this.dateTime = meal.getDateTime();
-        this.description = meal.getDescription();
-        this.calories = meal.getCalories();
+        this(meal.getId(), meal.getDateTime(), meal.getDescription(), meal.getCalories());
     }
 
     public LocalDateTime getDateTime() {

@@ -1,27 +1,31 @@
 package ru.javawebinar.topjava.model;
 
+import org.springframework.stereotype.Component;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-public class Meal {
-    private Integer id;
-
+@Component
+public class Meal extends AbstractBaseEntity {
     private final LocalDateTime dateTime;
 
     private final String description;
 
     private final int calories;
 
-    public Meal(LocalDateTime dateTime, String description, int calories) {
-        this(null, dateTime, description, calories);
+    private final int userId;
+
+    public Meal(LocalDateTime dateTime, String description, int calories, int userId) {
+        this(null, dateTime, description, calories, userId);
     }
 
-    public Meal(Integer id, LocalDateTime dateTime, String description, int calories) {
-        this.id = id;
+    public Meal(Integer id, LocalDateTime dateTime, String description, int calories, int userId) {
+        super(id);
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
+        this.userId = userId;
     }
 
     public Integer getId() {
@@ -52,6 +56,10 @@ public class Meal {
         return dateTime.toLocalTime();
     }
 
+    public int getUserid() {
+        return userId;
+    }
+
     public boolean isNew() {
         return id == null;
     }
@@ -60,6 +68,7 @@ public class Meal {
     public String toString() {
         return "Meal{" +
                 "id=" + id +
+                ", userId=" + id +
                 ", dateTime=" + dateTime +
                 ", description='" + description + '\'' +
                 ", calories=" + calories +

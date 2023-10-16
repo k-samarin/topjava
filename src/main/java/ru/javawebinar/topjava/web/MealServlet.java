@@ -39,7 +39,7 @@ public class MealServlet extends HttpServlet {
                 userId);
 
         log.info(meal.isNew() ? "Create {}" : "Update {}", meal);
-        repository.save(meal, userId);
+        repository.save(meal, meal.getId(), userId);
         response.sendRedirect("meals");
     }
 
@@ -62,7 +62,6 @@ public class MealServlet extends HttpServlet {
                         new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000, userId) :
                         repository.get(getId(request), userId);
                 request.setAttribute("meal", meal);
-                request.setAttribute("userId", userId);
                 request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
                 break;
             case "all":
@@ -70,7 +69,6 @@ public class MealServlet extends HttpServlet {
                 log.info("getAll");
                 request.setAttribute("meals",
                         MealsUtil.getTos(repository.getAll(userId), MealsUtil.DEFAULT_CALORIES_PER_DAY));
-                request.setAttribute("userId", userId);
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
         }

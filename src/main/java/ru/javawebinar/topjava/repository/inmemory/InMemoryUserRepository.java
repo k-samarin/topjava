@@ -48,7 +48,7 @@ public class InMemoryUserRepository implements UserRepository {
         return repository.values()
                 .stream()
                 .sorted(Comparator.comparing(User::getName)
-                        .thenComparing(user -> user.getEmail()))
+                        .thenComparing(User::getEmail))
                 .collect(Collectors.toList());
     }
 
@@ -57,7 +57,7 @@ public class InMemoryUserRepository implements UserRepository {
         log.info("getByEmail {}", email);
         return repository.values()
                 .stream()
-                .filter(user -> user.getEmail().equals(email))
+                .filter(user -> user.getEmail().equals(email.toLowerCase()))
                 .findFirst()
                 .orElse(null);
     }

@@ -39,7 +39,7 @@ public class InMemoryMealRepository implements MealRepository {
 
         return get(meal.getId(), userId) == null
                 ? null
-                : repository.get(userId).computeIfPresent(meal.getId(), (k, oldMeal) -> meal);
+                : mealMap.computeIfPresent(meal.getId(), (k, oldMeal) -> meal);
     }
 
     @Override
@@ -64,7 +64,8 @@ public class InMemoryMealRepository implements MealRepository {
     }
 
     private List<Meal> getFiltered(int userId, Predicate<Meal> filter) {
-        return repository.get(userId).values()
+        Map<Integer, Meal> mealMap = repository.computeIfAbsent(userId, k -> new ConcurrentHashMap<>());
+        return mealMap.values()
                 .stream()
                 .filter(filter)
                 .sorted(Comparator.comparing(Meal::getDateTime).reversed())

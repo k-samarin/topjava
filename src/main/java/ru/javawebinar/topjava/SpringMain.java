@@ -24,23 +24,23 @@ public class SpringMain {
 
             MealRestController mealRestController = appCtx.getBean(MealRestController.class);
             mealRestController.create(
-                    new Meal(LocalDateTime.of(2020, Month.MARCH, 10, 10, 0), "March Завтрак", 500, 2)
+                    new Meal(LocalDateTime.of(2020, Month.MARCH, 10, 10, 0), "March Завтрак", 500)
             );
 
             try {
                 mealRestController.update(
-                        new Meal(12, LocalDateTime.of(2020, Month.MARCH, 10, 10, 0), "March Завтрак", 500, 1), 11
+                        new Meal(12, LocalDateTime.of(2020, Month.MARCH, 10, 10, 0), "March Завтрак", 500), 11
                 );
             } catch (Exception e) {
                 System.out.println("Exception " + e.getMessage());
             }
 
             mealRestController.update(
-                    new Meal(6, LocalDateTime.of(2020, Month.MARCH, 10, 10, 0), "March Завтрак updated", 500, 1), 6
+                    new Meal(6, LocalDateTime.of(2020, Month.MARCH, 10, 10, 0), "March Завтрак updated", 500), 6
             );
 
             mealRestController.create(
-                    new Meal(LocalDateTime.of(2020, Month.MARCH, 10, 10, 0), "March Завтрак", 500, 1)
+                    new Meal(LocalDateTime.of(2020, Month.MARCH, 10, 10, 0), "March Завтрак", 500)
             );
 
             mealRestController.getAll().forEach(System.out::println);

@@ -27,7 +27,6 @@ public class MealRestController {
     @Autowired
     private MealService service;
 
-
     public Meal create(Meal meal) {
         log.info("create");
         checkNew(meal);

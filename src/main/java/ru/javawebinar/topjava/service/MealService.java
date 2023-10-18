@@ -3,6 +3,7 @@ package ru.javawebinar.topjava.service;
 import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.util.ValidationUtil;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -23,7 +24,7 @@ public class MealService {
     }
 
     public Meal update(Meal meal, int userId) {
-        return repository.save(meal, userId);
+        return ValidationUtil.checkNotFoundWithId(repository.save(meal, userId), meal.getId());
     }
 
     public void delete(int id, int userId) {
@@ -41,5 +42,4 @@ public class MealService {
     public List<Meal> getFiltered(int userId, LocalDate startDate, LocalDate endDate) {
         return repository.getFiltered(userId, startDate, endDate);
     }
-
 }

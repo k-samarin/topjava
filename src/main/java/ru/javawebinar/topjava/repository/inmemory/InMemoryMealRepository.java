@@ -53,29 +53,25 @@ public class InMemoryMealRepository implements MealRepository {
 
     @Override
     public List<Meal> getAll(int userId) {
-        return getFiltered(meal -> isForUser(meal.getUserId(), userId));
+        return getFiltered(userId, meal -> true);
     }
 
     @Override
     public List<Meal> getFiltered(int userId, LocalDate startDate, LocalDate endDate) {
-        return getFiltered(meal -> isForUserAndBetweenDatesClosed(meal.getUserId(), userId, meal.getDate(), startDate, endDate));
+        return getFiltered(userId, meal -> isBetweenClosed(meal.getDate(), startDate, endDate));
     }
 
-    private List<Meal> getFiltered(Predicate<Meal> filter) {
+    private List<Meal> getFiltered(int userId, Predicate<Meal> filter) {
         return repository.values()
                 .stream()
+                .filter(meal -> meal.getUserId() == userId)
                 .filter(filter)
                 .sorted(Comparator.comparing(Meal::getDateTime).reversed())
                 .collect(Collectors.toList());
-
     }
 
-    private boolean isForUserAndBetweenDatesClosed(int mealUserId, int userId, LocalDate ld, LocalDate startDate, LocalDate endDate) {
-        return mealUserId == userId && !ld.isBefore(startDate) && !ld.isAfter(endDate);
-    }
-
-    private boolean isForUser(int mealUserId, int userId) {
-        return mealUserId == userId;
+    private boolean isBetweenClosed(LocalDate ld, LocalDate startDate, LocalDate endDate) {
+        return !ld.isBefore(startDate) && !ld.isAfter(endDate);
     }
 }
 

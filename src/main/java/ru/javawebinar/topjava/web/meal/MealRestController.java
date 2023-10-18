@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.repository.inmemory.InMemoryMealRepository;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealTo;
 
@@ -26,7 +25,7 @@ public class MealRestController {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private MealService service = new MealService(new InMemoryMealRepository());
+    private MealService service;
 
 
     public Meal create(Meal meal) {

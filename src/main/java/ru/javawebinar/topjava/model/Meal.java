@@ -57,10 +57,6 @@ public class Meal extends AbstractBaseEntity {
         this.userId = userId;
     }
 
-    public boolean isNew() {
-        return super.isNew();
-    }
-
     @Override
     public String toString() {
         return "Meal{" +

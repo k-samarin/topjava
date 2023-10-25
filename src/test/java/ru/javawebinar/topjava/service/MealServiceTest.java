@@ -9,7 +9,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
-import ru.javawebinar.topjava.MealTestData;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
@@ -73,7 +72,7 @@ public class MealServiceTest {
 
     @Test
     public void getBetweenInclusive() {
-        List<Meal> selected = service.getBetweenInclusive(localDate_2020_01_30, localDate_2020_01_30, USER_ID);
+        List<Meal> selected = service.getBetweenInclusive(LOCAL_DATE_2020_01_30, LOCAL_DATE_2020_01_30, USER_ID);
         assertMatch(selected, betweenInclusiveMeals);
     }
 
@@ -84,8 +83,9 @@ public class MealServiceTest {
 
     @Test
     public void update() {
-        service.update(meal2Update, USER_ID);
-        assertMatch(service.get(MEAL_2_ID, USER_ID), meal2Update);
+        Meal meal = getUpdated();
+        service.update(meal, USER_ID);
+        assertMatch(service.get(MEAL_2_ID, USER_ID), getUpdated());
     }
 
     @Test
@@ -95,11 +95,12 @@ public class MealServiceTest {
 
     @Test
     public void create() {
-        Meal newMeal = MealTestData.getNew();
-        Meal created = service.create(newMeal, USER_ID);
-        newMeal.setId(created.getId());
-        Meal savedMeal = service.get(created.getId(), USER_ID);
-        assertMatch(savedMeal, newMeal);
+        Meal created = service.create(getNew(), USER_ID);
+        Integer newId = created.getId();
+        Meal newMeal = getNew();
+        newMeal.setId(newId);
+        assertMatch(created, newMeal);
+        assertMatch(service.get(newId, USER_ID), newMeal);
     }
 
     @Test

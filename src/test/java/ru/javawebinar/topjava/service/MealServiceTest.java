@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
@@ -22,6 +23,7 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 
 @ContextConfiguration({
         "classpath:spring/spring-app.xml",
+        "classpath:spring/spring-repo.xml",
         "classpath:spring/spring-db.xml"
 })
 @RunWith(SpringRunner.class)
@@ -82,27 +84,13 @@ public class MealServiceTest {
 
     @Test
     public void update() {
-        Meal meal = service.get(MEAL_2_ID, USER_ID);
-
-        meal.setDateTime(meal2Update.getDateTime());
-        meal.setDescription(meal2Update.getDescription());
-        meal.setCalories(meal2Update.getCalories());
-        service.update(meal, USER_ID);
-
-        Meal updatedMeal = service.get(MEAL_2_ID, USER_ID);
-        assertMatch(updatedMeal, meal2Update);
+        service.update(meal2Update, USER_ID);
+        assertMatch(service.get(MEAL_2_ID, USER_ID), meal2Update);
     }
 
     @Test
     public void updateAlien() {
-        Meal meal = service.get(MEAL_2_ID, USER_ID);
-
-        meal.setDateTime(meal2Update.getDateTime());
-        meal.setDescription(meal2Update.getDescription());
-        meal.setCalories(meal2Update.getCalories());
-        service.update(meal, USER_ID);
-
-        assertThrows(NotFoundException.class, () -> service.update(meal, ADMIN_ID));
+        assertThrows(NotFoundException.class, () -> service.update(meal2, ADMIN_ID));
     }
 
     @Test
@@ -110,9 +98,13 @@ public class MealServiceTest {
         Meal newMeal = MealTestData.getNew();
         Meal created = service.create(newMeal, USER_ID);
         newMeal.setId(created.getId());
-        assertMatch(created, newMeal);
-
         Meal savedMeal = service.get(created.getId(), USER_ID);
-        assertMatch(savedMeal, created);
+        assertMatch(savedMeal, newMeal);
     }
+
+    @Test
+    public void createDuplicateDateTime() {
+        assertThrows(DuplicateKeyException.class, () -> service.create(mealDuplicateDateTime, USER_ID));
+    }
+
 }

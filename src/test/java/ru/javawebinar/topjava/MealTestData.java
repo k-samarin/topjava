@@ -39,6 +39,7 @@ public class MealTestData {
     public static final Meal meal4 = new Meal(MEAL_4_ID, LocalDateTime.of(localDate_2020_01_31, localTime_10_00), "Завтрак", 1000);
     public static final Meal meal5 = new Meal(MEAL_5_ID, LocalDateTime.of(localDate_2020_01_31, localTime_13_00), "Обед", 500);
     public static final Meal meal6 = new Meal(MEAL_6_ID, LocalDateTime.of(localDate_2020_01_31, localTime_20_00), "Ужин", 410);
+    public static final Meal mealDuplicateDateTime = new Meal(LocalDateTime.of(localDate_2020_01_31, localTime_20_00), "Ужин duplicate datetime", 410);
 
     public static final Meal meal2Update = new Meal(MEAL_2_ID, localDateTime_new, "NewDescription", 999);
 

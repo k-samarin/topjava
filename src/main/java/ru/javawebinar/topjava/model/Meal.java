@@ -24,7 +24,7 @@ public class Meal extends AbstractBaseEntity {
     public static final String BETWEEN_HALF_OPEN = "Meal.getBetweenHalfOpen";
     public static final String DELETE = "Meal.delete";
 
-    @Column(name = "date_time", nullable = false, columnDefinition = "timestamp default now()", unique = true)
+    @Column(name = "date_time", nullable = false)
     @NotNull
     private LocalDateTime dateTime;
 
@@ -34,12 +34,12 @@ public class Meal extends AbstractBaseEntity {
     private String description;
 
     @Column(name = "calories", nullable = false)
-    @NotNull
     @Range(min = 0, max = 10000)
     private int calories;
 
-    @CollectionTable(name="User",joinColumns=@JoinColumn(name="id"))
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="user_id", nullable = false)
+    @NotNull
     private User user;
 
     public Meal() {

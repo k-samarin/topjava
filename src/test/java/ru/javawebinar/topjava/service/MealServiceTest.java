@@ -38,16 +38,25 @@ public class MealServiceTest {
 
     private static final Log logger = LogFactory.getLog(MealServiceTest.class);
 
-    private static final List testResults = new ArrayList<String>();
+    private static final List<String> testResults = new ArrayList<>();
 
     @Autowired
     private MealService service;
 
-    private static void logInfo(String testName, String status, long nanos) {
-        String testResult = String.format("Test %s is %s, with duration %d microseconds ",
-                testName, status, TimeUnit.NANOSECONDS.toMicros(nanos));
-        testResults.add(testResult);
-        logger.debug(testResult);
+    @Rule
+    public Stopwatch stopwatch = new Stopwatch() {
+        @Override
+        protected void finished(long nanos, Description description) {
+            String testResult = String.format("%s - %d ms",
+                    description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(nanos));
+            logger.debug(testResult);
+            testResults.add(testResult);
+        }
+    };
+
+    @AfterClass
+    public static void logTestResults() {
+        logger.debug(String.format("%s%s", System.lineSeparator(), String.join(System.lineSeparator(), testResults)));
     }
 
     @Test
@@ -128,22 +137,4 @@ public class MealServiceTest {
     public void getBetweenWithNullDates() {
         MEAL_MATCHER.assertMatch(service.getBetweenInclusive(null, null, USER_ID), meals);
     }
-
-    @AfterClass
-    public static void logTestResults() {
-        testResults.stream().forEach(result -> logger.debug(result));
-    }
-
-    @Rule
-    public Stopwatch stopwatch = new Stopwatch() {
-        @Override
-        protected void succeeded(long nanos, Description description) {
-            logInfo(description.getMethodName(), "succeeded", nanos);
-        }
-
-        @Override
-        protected void failed(long nanos, Throwable e, Description description) {
-            logInfo(description.getMethodName(), "failed", nanos);
-        }
-    };
 }

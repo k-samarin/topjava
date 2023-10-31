@@ -28,7 +28,7 @@ public class JpaMealRepository implements MealRepository {
             return meal;
         } else {
             Meal storedMeal = em.find(Meal.class, meal.getId());
-            if (storedMeal != null && (user.getId() == storedMeal.getUser().getId())) {
+            if (storedMeal != null && user.getId().equals(storedMeal.getUser().getId())) {
                 meal.setUser(user);
                 return em.merge(meal);
             }
@@ -68,6 +68,5 @@ public class JpaMealRepository implements MealRepository {
                 .setParameter("startDateTime", startDateTime)
                 .setParameter("endDateTime", endDateTime)
                 .getResultList();
-
     }
 }

@@ -1,6 +1,12 @@
 package ru.javawebinar.topjava.service;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.junit.AfterClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.Stopwatch;
+import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -13,6 +19,9 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.MealTestData.*;
@@ -27,8 +36,19 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
 
+    private static final Log logger = LogFactory.getLog(MealServiceTest.class);
+
+    private static final List testResults = new ArrayList<String>();
+
     @Autowired
     private MealService service;
+
+    private static void logInfo(String testName, String status, long nanos) {
+        String testResult = String.format("Test %s is %s, with duration %d microseconds ",
+                testName, status, TimeUnit.NANOSECONDS.toMicros(nanos));
+        testResults.add(testResult);
+        logger.debug(testResult);
+    }
 
     @Test
     public void delete() {
@@ -108,4 +128,22 @@ public class MealServiceTest {
     public void getBetweenWithNullDates() {
         MEAL_MATCHER.assertMatch(service.getBetweenInclusive(null, null, USER_ID), meals);
     }
+
+    @AfterClass
+    public static void logTestResults() {
+        testResults.stream().forEach(result -> logger.debug(result));
+    }
+
+    @Rule
+    public Stopwatch stopwatch = new Stopwatch() {
+        @Override
+        protected void succeeded(long nanos, Description description) {
+            logInfo(description.getMethodName(), "succeeded", nanos);
+        }
+
+        @Override
+        protected void failed(long nanos, Throwable e, Description description) {
+            logInfo(description.getMethodName(), "failed", nanos);
+        }
+    };
 }

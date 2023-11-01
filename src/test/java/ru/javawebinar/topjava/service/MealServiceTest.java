@@ -1,7 +1,7 @@
 package ru.javawebinar.topjava.service;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.AfterClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -36,7 +36,9 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
 
-    private static final Log logger = LogFactory.getLog(MealServiceTest.class);
+    private static final int EXPECTED_METHOD_NAME_MAX_LENGTH = 30;
+
+    private static final Logger log = LoggerFactory.getLogger(MealServiceTest.class);
 
     private static final List<String> testResults = new ArrayList<>();
 
@@ -47,16 +49,17 @@ public class MealServiceTest {
     public Stopwatch stopwatch = new Stopwatch() {
         @Override
         protected void finished(long nanos, Description description) {
-            String testResult = String.format("%s - %d ms",
-                    description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(nanos));
-            logger.debug(testResult);
+            String formatString =
+                    "%-" + Math.max(description.getMethodName().length(), EXPECTED_METHOD_NAME_MAX_LENGTH) + "s %d ms";
+            String testResult = String.format(formatString, description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(nanos));
+            log.debug(testResult);
             testResults.add(testResult);
         }
     };
 
     @AfterClass
     public static void logTestResults() {
-        logger.debug(String.format("%s%s", System.lineSeparator(), String.join(System.lineSeparator(), testResults)));
+        log.debug(String.format("%s%s", System.lineSeparator(), String.join(System.lineSeparator(), testResults)));
     }
 
     @Test

@@ -1,11 +1,9 @@
 package ru.javawebinar.topjava.repository.datajpa;
 
-import net.bytebuddy.asm.Advice;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
-import ru.javawebinar.topjava.service.UserService;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

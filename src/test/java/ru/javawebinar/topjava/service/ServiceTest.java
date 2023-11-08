@@ -25,7 +25,7 @@ import static ru.javawebinar.topjava.UserTestData.NOT_FOUND;
 })
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-public class ServiceTest {
+public abstract class ServiceTest {
 
     private static final Logger log = getLogger("result");
 
@@ -51,5 +51,4 @@ public class ServiceTest {
                 "\n---------------------------------");
         results = new StringBuilder();;
     }
-
 }

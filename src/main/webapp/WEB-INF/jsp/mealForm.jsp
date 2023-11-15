@@ -9,16 +9,9 @@
 <body>
 <jsp:include page="fragments/bodyHeader.jsp"/>
 <section>
-    <h2>
-    <c:choose>
-        <c:when test="${param.action == 'create'}">
-            <spring:message code="meal.createMeal"/>
-        </c:when>
-        <c:otherwise>
-            <spring:message code="meal.editMeal"/>
-        </c:otherwise>
-    </c:choose>
-    </h2>
+    <spring:message code="meal.createMeal" var="create"/>
+    <spring:message code="meal.editMeal" var="edit"/>
+    <h2>${meal.id == null ? create : edit}</h2>
     <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.Meal" scope="request"/>
     <form method="post" action="meals">
         <input type="hidden" name="id" value="${meal.id}">

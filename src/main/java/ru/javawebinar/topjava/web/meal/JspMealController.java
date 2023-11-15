@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.web.meal;
 
-import net.bytebuddy.matcher.StringMatcher;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -43,7 +42,7 @@ public class JspMealController extends AbstractMealController {
     public String delete(Model model, @RequestParam(value = "id") int id) {
         super.delete(id);
         getAll(model);
-        return "meals";
+        return "redirect:meals";
     }
 
     @RequestMapping(value = "/meals", params = "action=create")
@@ -51,7 +50,6 @@ public class JspMealController extends AbstractMealController {
         log.info("create");
         Meal meal = new Meal(null, LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000);
         ModelAndView modelAndView = new ModelAndView("mealForm");
-        modelAndView.addObject("action", "create");
         modelAndView.addObject("meal", meal);
         return modelAndView;
     }
@@ -61,7 +59,6 @@ public class JspMealController extends AbstractMealController {
         log.info("update {}", id);
         Meal meal = super.get(id);
         ModelAndView modelAndView = new ModelAndView("mealForm");
-        modelAndView.addObject("action", "update");
         modelAndView.addObject("meal", meal);
         return modelAndView;
     }

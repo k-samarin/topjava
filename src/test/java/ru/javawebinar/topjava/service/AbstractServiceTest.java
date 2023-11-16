@@ -42,15 +42,14 @@ public abstract class AbstractServiceTest {
 
     //  Check root cause in JUnit: https://github.com/junit-team/junit4/pull/778
     protected <T extends Throwable> void validateRootCause(Class<T> rootExceptionClass, Runnable runnable) {
-        Assume.assumeTrue(
-                Arrays.stream(environment.getActiveProfiles()).noneMatch(profile -> Profiles.JDBC.equals(profile)));
-
-        assertThrows(rootExceptionClass, () -> {
-            try {
-                runnable.run();
-            } catch (Exception e) {
-                throw getRootCause(e);
-            }
-        });
+        if (Arrays.stream(environment.getActiveProfiles()).noneMatch(profile -> Profiles.JDBC.equals(profile))) {
+            assertThrows(rootExceptionClass, () -> {
+                try {
+                    runnable.run();
+                } catch (Exception e) {
+                    throw getRootCause(e);
+                }
+            });
+        }
     }
 }

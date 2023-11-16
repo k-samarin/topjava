@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <html>
+<jsp:include page="fragments/headTag.jsp"/>
 <head>
     <title>Meal</title>
     <link rel="stylesheet" href="resources/css/style.css">
@@ -11,9 +12,10 @@
 <section>
     <spring:message code="meal.createMeal" var="create"/>
     <spring:message code="meal.editMeal" var="edit"/>
+    <c:set var="action" value="${(meal.id == null)? 'create' : 'update'}"/>
     <h2>${meal.id == null ? create : edit}</h2>
     <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.Meal" scope="request"/>
-    <form method="post" action="meals">
+    <form method="post" action="${action}">
         <input type="hidden" name="id" value="${meal.id}">
         <dl>
             <dt><spring:message code="meal.date"/>:</dt>

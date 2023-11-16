@@ -2,8 +2,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <html>
-<jsp:include page="fragments/headTag.jsp"/>
+
 <body>
+<head>
+    <jsp:include page="fragments/headTag.jsp"/>
+</head>
 <jsp:include page="fragments/bodyHeader.jsp"/>
 <section>
     <spring:message code="meal.createMeal" var="create"/>
@@ -29,5 +32,6 @@
         <button onclick="window.history.back()" type="button"><spring:message code="common.cancel"/></button>
     </form>
 </section>
+<jsp:include page="fragments/footer.jsp"/>
 </body>
 </html>

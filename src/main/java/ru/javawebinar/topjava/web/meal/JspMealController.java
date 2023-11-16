@@ -67,7 +67,7 @@ public class JspMealController extends AbstractMealController {
         return modelAndView;
     }
 
-    @GetMapping(value = "/meals", params = "action=filter")
+    @GetMapping("/meals/filter")
     public String getFiltered(
             Model model,
             @RequestParam(value = "startDate", required = false) String startDate,

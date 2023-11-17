@@ -7,17 +7,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
-import ru.javawebinar.topjava.to.MealTo;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalDate;
 import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalTime;
@@ -86,31 +83,6 @@ public class JspMealController extends AbstractMealController {
         LocalTime endT = parseLocalTime(endTime);
 
         model.addAttribute("meals", super.getBetween(startD, startT, endD, endT));
-        /*List<MealTo> meals = super.getBetween(startD, startT, endD, endT);
-        ModelAndView modelAndView = new ModelAndView(new RedirectView("/filtered"));
-        modelAndView.setViewName("meals");
-        modelAndView.addObject("meals", meals);
-        return modelAndView;*/
-        return "redirect:/filtered";
-    }
-
-    @GetMapping("/filtered")
-    public String getFiltered(
-            Model model,
-            @RequestParam(value = "startDate", required = false) String startDate,
-            @RequestParam(value = "endDate", required = false) String endDate,
-            @RequestParam(value = "startTime", required = false) String startTime,
-            @RequestParam(value = "endTime", required = false) String endTime) {
-        int userId = SecurityUtil.authUserId();
-
-        log.info("get filtered meals for {}", userId);
-        LocalDate startD = parseLocalDate(startDate);
-        LocalDate endD = parseLocalDate(endDate);
-        LocalTime startT = parseLocalTime(startTime);
-        LocalTime endT = parseLocalTime(endTime);
-
-        model.addAttribute("meals", super.getBetween(startD, startT, endD, endT));
         return "meals";
     }
-
 }

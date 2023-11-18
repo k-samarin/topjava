@@ -41,7 +41,7 @@ public class UserService {
         return checkNotFound(repository.getByEmail(email), "email=" + email);
     }
 
-    @Cacheable("users")
+    @CacheEvict(value = "users", allEntries = true)
     public List<User> getAll() {
         return repository.getAll();
     }

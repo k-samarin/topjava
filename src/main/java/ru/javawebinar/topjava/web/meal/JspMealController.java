@@ -2,10 +2,7 @@ package ru.javawebinar.topjava.web.meal;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
@@ -20,36 +17,37 @@ import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalDate;
 import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalTime;
 
 @Controller
+@RequestMapping(value = "/meals")
 public class JspMealController extends AbstractMealController {
     public JspMealController(MealService service) {
         super(service);
     }
 
-    @PostMapping("/meals/create")
+    @PostMapping("/create")
     public String createNew(@ModelAttribute("meal") Meal meal) {
         super.create(meal);
         return "redirect:/meals";
     }
 
-    @PostMapping("/meals/update")
+    @PostMapping("/update")
     public String update(@ModelAttribute("meal") Meal meal) {
         super.update(meal, meal.getId());
         return "redirect:/meals";
     }
 
-    @GetMapping("/meals")
+    @GetMapping
     public String getAll(Model model) {
         model.addAttribute("meals", super.getAll());
         return "meals";
     }
 
-    @GetMapping("/meals/delete")
+    @GetMapping("/delete")
     public String deleteExistent(@RequestParam(value = "id") int id) {
         super.delete(id);
         return "redirect:/meals";
     }
 
-    @GetMapping("/meals/create")
+    @GetMapping("/create")
     public ModelAndView create() {
         log.info("create");
         Meal meal = new Meal(null, LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000);
@@ -58,7 +56,7 @@ public class JspMealController extends AbstractMealController {
         return modelAndView;
     }
 
-    @GetMapping("/meals/update")
+    @GetMapping("/update")
     public ModelAndView update(@RequestParam(value = "id") int id) {
         log.info("update {}", id);
         Meal meal = super.get(id);
@@ -67,7 +65,7 @@ public class JspMealController extends AbstractMealController {
         return modelAndView;
     }
 
-    @GetMapping("/meals/filter")
+    @GetMapping("/filter")
     public String getSelectFiltered(
             Model model,
             @RequestParam(value = "startDate", required = false) String startDate,

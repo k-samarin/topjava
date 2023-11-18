@@ -1,14 +1,13 @@
 package ru.javawebinar.topjava;
 
-import org.junit.AssumptionViolatedException;
-import org.junit.Rule;
+import org.junit.Assume;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 
 public class TestSkipper implements MethodRule {
 
-    private String testName;
+    private final String testName;
 
     public TestSkipper(String testName) {
         this.testName = testName;
@@ -19,10 +18,7 @@ public class TestSkipper implements MethodRule {
         return new Statement() {
             @Override
             public void evaluate() throws Throwable {
-                if (testName.equalsIgnoreCase(method.getName())) {
-                    throw new AssumptionViolatedException(
-                            String.format("Test %s#%s is skipped", target.getClass().getName(), method.getName()));
-                }
+                Assume.assumeFalse(testName.equalsIgnoreCase(method.getName()));
                 base.evaluate();
             }
         };

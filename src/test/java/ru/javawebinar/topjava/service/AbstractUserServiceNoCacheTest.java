@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.service;
 
-import org.junit.Assume;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -12,7 +11,6 @@ import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import javax.validation.ConstraintViolationException;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -87,8 +85,7 @@ public abstract class AbstractUserServiceNoCacheTest extends AbstractServiceTest
 
     @Test
     public void createWithException() throws Exception {
-        Assume.assumeTrue(
-                Arrays.stream(environment.getActiveProfiles()).noneMatch(profile -> Profiles.JDBC.equals(profile)));
+        super.checkAssumeNotMatchProfiles(Profiles.JDBC);
 
         validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "  ", "mail@yandex.ru", "password", Role.USER)));
         validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "User", "  ", "password", Role.USER)));

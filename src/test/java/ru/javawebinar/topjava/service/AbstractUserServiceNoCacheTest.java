@@ -21,9 +21,6 @@ import static ru.javawebinar.topjava.UserTestData.*;
 public abstract class AbstractUserServiceNoCacheTest extends AbstractServiceTest {
 
     @Autowired
-    private Environment environment;
-
-    @Autowired
     protected UserService service;
 
     @Test

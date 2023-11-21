@@ -3,13 +3,14 @@ package ru.javawebinar.topjava;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 
 import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
 
 public class UserTestData {
-    public static final MatcherFactory.Matcher<User> USER_MATCHER = MatcherFactory.usingIgnoringFieldsComparator("registered", "roles", "meals");
+    public static final MatcherFactory.Matcher<User> USER_MATCHER = MatcherFactory.usingIgnoringFieldsComparator("registered", "meals");
 
     public static final int USER_ID = START_SEQ;
     public static final int ADMIN_ID = START_SEQ + 1;
@@ -31,7 +32,7 @@ public class UserTestData {
         updated.setCaloriesPerDay(330);
         updated.setPassword("newPass");
         updated.setEnabled(false);
-        updated.setRoles(Collections.singletonList(Role.ADMIN));
+        updated.setRoles(Arrays.asList(Role.ADMIN, Role.USER));
         return updated;
     }
 }

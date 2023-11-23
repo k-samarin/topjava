@@ -16,10 +16,7 @@ import ru.javawebinar.topjava.repository.UserRepository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 @Transactional(readOnly = true)
@@ -57,14 +54,18 @@ public class JdbcUserRepository implements UserRepository {
                     user.getRoles(),
                     10,
                     (PreparedStatement ps, Role role) -> {
-                        ps.setLong(1, (Integer)newKey);
+                        ps.setLong(1, (Integer) newKey);
                         ps.setString(2, role.name());
                     });
         } else if (namedParameterJdbcTemplate.update("""
                    UPDATE users SET name=:name, email=:email, password=:password,
                    registered=:registered, enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id
                 """, parameterSource) > 0) {
-            jdbcTemplate.batchUpdate("INSERT INTO user_role (user_id, role) VALUES (?, ?) ON CONFLICT DO NOTHING",
+            jdbcTemplate.batchUpdate("""
+                        MERGE INTO user_role AS ur USING (VALUES(?,?))
+                        ON (ur.user_id=? AND ur.role=?)
+                        WHEN MATCHED THEN DO NOTHING
+                        WHEN NOT MATCHED THEN INSERT VALUES(?,?)""",
                     user.getRoles(),
                     10,
                     (PreparedStatement ps, Role role) -> {
@@ -104,8 +105,8 @@ public class JdbcUserRepository implements UserRepository {
     }
 
     private List<User> createUserList(ResultSet rs) throws SQLException {
-        Map<Integer, User> users = new HashMap<>();
-        while(rs.next()) {
+        Map<Integer, User> users = new LinkedHashMap<>();
+        while (rs.next()) {
             int id = rs.getInt("id");
             String role = rs.getString("role");
             if (users.get(id) != null) {
@@ -113,20 +114,13 @@ public class JdbcUserRepository implements UserRepository {
                     users.get(id).getRoles().add(Role.valueOf(rs.getString("role")));
                 }
             } else {
-                User user = new User(
-                        id,
-                        rs.getString("name"),
-                        rs.getString("email"),
-                        rs.getString("password"),
-                        rs.getInt("calories_per_day"),
-                        rs.getBoolean("enabled"),
-                        rs.getDate("registered"),
-                        role != null?
-                                Collections.singleton(Role.valueOf(rs.getString("role"))):
-                                Collections.emptyList());
+                User user = ROW_MAPPER.mapRow(rs, rs.getRow());
+                user.setRoles(role != null ?
+                        Collections.singleton(Role.valueOf(rs.getString("role"))) :
+                        Collections.emptyList());
                 users.put(id, user);
             }
         }
-        return users.values().stream().toList();
+        return new ArrayList<>(users.values());
     }
 }

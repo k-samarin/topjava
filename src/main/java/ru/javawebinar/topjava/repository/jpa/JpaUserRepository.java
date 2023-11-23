@@ -8,10 +8,7 @@ import ru.javawebinar.topjava.repository.UserRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Repository
 @Transactional(readOnly = true)
@@ -65,24 +62,11 @@ public class JpaUserRepository implements UserRepository {
         List<User> users = em.createNamedQuery(User.BY_EMAIL, User.class)
                 .setParameter(1, email)
                 .getResultList();
-        return DataAccessUtils.singleResult(createUserList(users));
+        return DataAccessUtils.singleResult(users);
     }
 
     @Override
     public List<User> getAll() {
-        return em.createNamedQuery(User.ALL_SORTED, User.class)
-                .getResultList();
-    }
-
-    private Collection<User> createUserList(List<User> users) {
-        Map<Integer, User> usersMap = new HashMap<>();
-        for (User user : users) {
-            if (usersMap.get(user.getId()) != null) {
-                usersMap.get(user.getId()).getRoles().addAll(user.getRoles());
-            } else {
-                usersMap.put(user.getId(), user);
-            }
-        }
-        return usersMap.values().stream().toList();
+        return em.createNamedQuery(User.ALL_SORTED, User.class).getResultList();
     }
 }

@@ -67,6 +67,11 @@
             <constructor-arg ref="jdbcTemplate"/>
         </bean>
 
+        <!-- Enable Annotation based Declarative Transaction Management -->
+        <tx:annotation-driven proxy-target-class="true" transaction-manager="transactionManager" />
+
+        <!-- Creating TransactionManager Bean, since JDBC we are creating of type
+            DataSourceTransactionManager -->
         <bean id="transactionManager"
               class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
             <property name="dataSource" ref="dataSource" />

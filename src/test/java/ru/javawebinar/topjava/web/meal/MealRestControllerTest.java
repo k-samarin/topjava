@@ -3,10 +3,10 @@ package ru.javawebinar.topjava.web.meal;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import ru.javawebinar.topjava.MatcherFactory;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealTo;
@@ -16,7 +16,6 @@ import ru.javawebinar.topjava.web.json.JsonUtil;
 
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -73,7 +72,7 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(mealToMatch(mealsFiltered));
+                .andExpect(mealToMatch(mealTosFiltered));
     }
 
     @Test
@@ -91,19 +90,14 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(mealToMatch(meals));
+                .andExpect(mealToMatch(mealTos));
     }
 
-    private static ResultMatcher mealToMatch(List<Meal> meals) {
-        return new ResultMatcher() {
-            @Override
-            public void match(MvcResult result) throws Exception {
-                List<MealTo> mealTos = JsonUtil.readValues(result.getResponse().getContentAsString(), MealTo.class);
-                List<Meal> actualMeals = mealTos.stream()
-                        .map(m -> new Meal(m.getId(), m.getDateTime(), m.getDescription(), m.getCalories()))
-                        .collect(toList());
-                MEAL_MATCHER.assertMatch(actualMeals, meals);
-            }
+    private static ResultMatcher mealToMatch(List<MealTo> mealTos) {
+        return result -> {
+            List<MealTo> actualMealTos = JsonUtil.readValues(result.getResponse().getContentAsString(), MealTo.class);
+            MatcherFactory.Matcher<MealTo> mealToMatcher = MatcherFactory.usingIgnoringFieldsComparator(MealTo.class);
+            mealToMatcher.assertMatch(actualMealTos, mealTos);
         };
     }
 }

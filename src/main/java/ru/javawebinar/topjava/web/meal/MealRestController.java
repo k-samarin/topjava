@@ -58,8 +58,8 @@ public class MealRestController extends AbstractMealController {
     public List<MealTo> getBetween(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String startDateTime,
                                    @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String endDateTime) {
 
-        LocalDateTime startDateTimeParam = LocalDateTime.parse(startDateTime, DateTimeFormatter.ISO_DATE_TIME);
-        LocalDateTime endDateTimeParam = LocalDateTime.parse(endDateTime, DateTimeFormatter.ISO_DATE_TIME);
+        LocalDateTime startDateTimeParam = LocalDateTime.parse(startDateTime);
+        LocalDateTime endDateTimeParam = LocalDateTime.parse(endDateTime);
         LocalDate startDateParam = startDateTimeParam.toLocalDate();
         LocalDate endDateParam = endDateTimeParam.toLocalDate();
         LocalTime startTimeParam = startDateTimeParam.toLocalTime();

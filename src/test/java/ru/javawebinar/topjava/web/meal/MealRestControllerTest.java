@@ -95,9 +95,8 @@ class MealRestControllerTest extends AbstractControllerTest {
 
     private static ResultMatcher mealToMatch(List<MealTo> mealTos) {
         return result -> {
-            List<MealTo> actualMealTos = JsonUtil.readValues(result.getResponse().getContentAsString(), MealTo.class);
             MatcherFactory.Matcher<MealTo> mealToMatcher = MatcherFactory.usingIgnoringFieldsComparator(MealTo.class);
-            mealToMatcher.assertMatch(actualMealTos, mealTos);
+            mealToMatcher.contentJson(mealTos).match(result);
         };
     }
 }

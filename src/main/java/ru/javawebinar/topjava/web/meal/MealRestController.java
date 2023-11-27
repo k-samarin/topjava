@@ -11,10 +11,11 @@ import ru.javawebinar.topjava.to.MealTo;
 
 import java.net.URI;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalDate;
+import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalTime;
 
 @RestController
 @RequestMapping(value = MealRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -55,15 +56,15 @@ public class MealRestController extends AbstractMealController {
     }
 
     @GetMapping("/filter")
-    public List<MealTo> getBetween(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String startDateTime,
-                                   @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String endDateTime) {
+    public List<MealTo> getBetween(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) String startDate,
+                                   @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) String endDate,
+                                   @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) String startTime,
+                                   @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) String endTime) {
 
-        LocalDateTime startDateTimeParam = LocalDateTime.parse(startDateTime);
-        LocalDateTime endDateTimeParam = LocalDateTime.parse(endDateTime);
-        LocalDate startDateParam = startDateTimeParam.toLocalDate();
-        LocalDate endDateParam = endDateTimeParam.toLocalDate();
-        LocalTime startTimeParam = startDateTimeParam.toLocalTime();
-        LocalTime endTimeParam = endDateTimeParam.toLocalTime();
+        LocalDate startDateParam = parseLocalDate(startDate);
+        LocalDate endDateParam = parseLocalDate(endDate);
+        LocalTime startTimeParam = parseLocalTime(startTime);
+        LocalTime endTimeParam = parseLocalTime(endTime);
         return super.getBetween(startDateParam, startTimeParam, endDateParam, endTimeParam);
     }
 }

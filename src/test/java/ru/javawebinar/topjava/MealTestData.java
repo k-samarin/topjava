@@ -30,7 +30,15 @@ public class MealTestData {
 
     public static final List<Meal> meals = List.of(meal7, meal6, meal5, meal4, meal3, meal2, meal1);
 
-    public static final List<MealTo> mealTos = MealsUtil.getTos(meals, MealsUtil.DEFAULT_CALORIES_PER_DAY);
+    public static final List<MealTo> mealTos = List.of(
+            MealsUtil.createTo(meals.get(0), true),
+            MealsUtil.createTo(meals.get(1), true),
+            MealsUtil.createTo(meals.get(2), true),
+            MealsUtil.createTo(meals.get(3), true),
+            MealsUtil.createTo(meals.get(4), false),
+            MealsUtil.createTo(meals.get(5), false),
+            MealsUtil.createTo(meals.get(6), false)
+    );
 
     public static final List<MealTo> mealTosFiltered = List.of(mealTos.get(4), mealTos.get(5), mealTos.get(6));
 

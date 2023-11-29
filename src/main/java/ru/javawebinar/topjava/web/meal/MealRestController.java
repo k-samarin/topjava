@@ -1,6 +1,6 @@
 package ru.javawebinar.topjava.web.meal;
 
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +13,7 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-
-import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalDate;
-import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalTime;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = MealRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -55,16 +53,16 @@ public class MealRestController extends AbstractMealController {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
+    @Qualifier("parameterConverter")
     @GetMapping("/filter")
-    public List<MealTo> getBetween(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) String startDate,
-                                   @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) String endDate,
-                                   @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) String startTime,
-                                   @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) String endTime) {
-
-        LocalDate startDateParam = parseLocalDate(startDate);
-        LocalDate endDateParam = parseLocalDate(endDate);
-        LocalTime startTimeParam = parseLocalTime(startTime);
-        LocalTime endTimeParam = parseLocalTime(endTime);
-        return super.getBetween(startDateParam, startTimeParam, endDateParam, endTimeParam);
+    public List<MealTo> getBetween(@RequestParam Optional<LocalDate> startDate,
+                                   @RequestParam Optional<LocalDate> endDate,
+                                   @RequestParam Optional<LocalTime> startTime,
+                                   @RequestParam Optional<LocalTime> endTime) {
+        return super.getBetween(
+                startDate.orElseGet(() -> LocalDate.of(1, 1, 1)),
+                startTime.orElse(LocalTime.MIN),
+                endDate.orElseGet(() -> LocalDate.of(3000, 1, 1)),
+                endTime.orElse(LocalTime.MAX));
     }
 }

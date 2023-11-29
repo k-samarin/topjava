@@ -10,6 +10,7 @@ import ru.javawebinar.topjava.MatcherFactory;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealTo;
+import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
@@ -65,16 +66,37 @@ class MealRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void getBetween() throws Exception {
+    void getBetweenAllParams() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + "filter")
-                .queryParam("startDate", "")
+                .queryParam("startDate", "2020-01-29")
                 .queryParam("endDate", "2020-01-30")
-                .queryParam("startTime", "")
-                .queryParam("endTime", "23:59:59"))
+                .queryParam("startTime", "00:00")
+                .queryParam("endTime", "23:59"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(mealToMatch(mealTosFiltered));
+    }
+
+    @Test
+    void getBetweenEndDateParam() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "filter")
+                .queryParam("startDate", "")
+                .queryParam("endDate", "2020-01-30"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(mealToMatch(mealTosFiltered));
+    }
+
+    @Test
+    void getBetweenEndTimeParam() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "filter")
+                .queryParam("endTime", "09:00"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(mealToMatch(List.of(MealsUtil.createTo(meal4, true))));
     }
 
     @Test

@@ -3,10 +3,11 @@ package ru.javawebinar.topjava.web.user;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.service.UserService;
+import ru.javawebinar.topjava.to.UserWithMealTo;
+import ru.javawebinar.topjava.util.MealsUtil;
 
 import java.util.List;
 
@@ -54,20 +55,9 @@ public abstract class AbstractUserController {
         return service.getByEmail(email);
     }
 
-    protected UserWithMeals getWithMeals(int id) {
+    public UserWithMealTo getWithMeals(int id) {
         log.info("get with meals {}", id);
-        return new UserWithMeals(get(id), mealService.getAll(id));
-    }
-
-    public class UserWithMeals {
-
-        private final User user;
-
-        private final List<Meal> meals;
-
-        public UserWithMeals(User user, List<Meal> meals) {
-            this.user = user;
-            this.meals = meals;
-        }
+        User user = service.get(id);
+        return new UserWithMealTo(user, MealsUtil.getTos(mealService.getAll(id), user.getCaloriesPerDay()));
     }
 }

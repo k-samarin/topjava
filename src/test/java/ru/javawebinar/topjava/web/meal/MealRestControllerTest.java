@@ -75,7 +75,7 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(mealToMatch(mealTosFiltered));
+                .andExpect(MEALTO_MATCHER.contentJson(mealTosFiltered));
     }
 
     @Test
@@ -86,7 +86,7 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(mealToMatch(mealTosFiltered));
+                .andExpect(MEALTO_MATCHER.contentJson(mealTosFiltered));
     }
 
     @Test
@@ -96,7 +96,7 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(mealToMatch(List.of(MealsUtil.createTo(meal4, true))));
+                .andExpect(MEALTO_MATCHER.contentJson(List.of(MealsUtil.createTo(meal4, true))));
     }
 
     @Test
@@ -114,13 +114,6 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(mealToMatch(mealTos));
-    }
-
-    private static ResultMatcher mealToMatch(List<MealTo> mealTos) {
-        return result -> {
-            MatcherFactory.Matcher<MealTo> mealToMatcher = MatcherFactory.usingIgnoringFieldsComparator(MealTo.class);
-            mealToMatcher.contentJson(mealTos).match(result);
-        };
+                .andExpect(MEALTO_MATCHER.contentJson(mealTos));
     }
 }

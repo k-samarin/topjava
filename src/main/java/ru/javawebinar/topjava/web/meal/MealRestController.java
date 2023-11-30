@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.web.meal;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +12,6 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(value = MealRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -53,16 +51,15 @@ public class MealRestController extends AbstractMealController {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
-    @Qualifier("parameterConverter")
     @GetMapping("/filter")
-    public List<MealTo> getBetween(@RequestParam Optional<LocalDate> startDate,
-                                   @RequestParam Optional<LocalDate> endDate,
-                                   @RequestParam Optional<LocalTime> startTime,
-                                   @RequestParam Optional<LocalTime> endTime) {
+    public List<MealTo> getBetween(@RequestParam(required = false) LocalDate startDate,
+                                   @RequestParam(required = false) LocalDate endDate,
+                                   @RequestParam(required = false) LocalTime startTime,
+                                   @RequestParam(required = false) LocalTime endTime) {
         return super.getBetween(
-                startDate.orElseGet(() -> LocalDate.of(1, 1, 1)),
-                startTime.orElse(LocalTime.MIN),
-                endDate.orElseGet(() -> LocalDate.of(3000, 1, 1)),
-                endTime.orElse(LocalTime.MAX));
+                startDate != null ? startDate : LocalDate.of(1, 1, 1),
+                startTime != null ? startTime : LocalTime.MIN,
+                endDate != null ? endDate : LocalDate.of(3000, 1, 1),
+                endTime != null ? endTime : LocalTime.MAX);
     }
 }

@@ -61,11 +61,11 @@ public class MealTo {
 
         MealTo that = (MealTo) o;
 
-        return id != null && that.getId() != null && id.equals(that.getId())
-                && calories == that.getCalories()
-                && description != null && that.getDescription() != null && description.equals(that.getDescription())
-                && dateTime != null && that.getDateTime() != null && dateTime.isEqual(that.getDateTime())
-                && excess == that.isExcess();
+        return Objects.equals(id, that.getId()) &&
+                calories == that.calories &&
+                Objects.equals(description, that.description) &&
+                Objects.equals(dateTime, that.dateTime) &&
+                excess == that.excess;
     }
 
     @Override

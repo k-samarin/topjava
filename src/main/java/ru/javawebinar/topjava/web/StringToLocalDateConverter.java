@@ -9,9 +9,10 @@ public class StringToLocalDateConverter implements Converter<String, LocalDate> 
 
     static final String DATE_PATTERN = "yyyy-MM-dd";
 
+    static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(DATE_PATTERN);
+
     @Override
     public LocalDate convert(String dateString) {
-        return dateString.isEmpty() ? null :
-                LocalDate.parse(dateString, DateTimeFormatter.ofPattern(DATE_PATTERN));
+        return dateString.isEmpty() ? null : LocalDate.parse(dateString, FORMATTER);
     }
 }

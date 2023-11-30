@@ -8,9 +8,10 @@ import java.time.format.DateTimeFormatter;
 public class StringToLocalTimeConverter implements Converter<String, LocalTime> {
     static final String TIME_PATTERN = "HH:mm";
 
+    static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(TIME_PATTERN);
+
     @Override
     public LocalTime convert(String dateString) {
-        return dateString.isEmpty() ? null :
-                LocalTime.parse(dateString, DateTimeFormatter.ofPattern(TIME_PATTERN));
+        return dateString.isEmpty() ? null : LocalTime.parse(dateString, FORMATTER);
     }
 }

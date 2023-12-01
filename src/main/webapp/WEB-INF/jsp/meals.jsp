@@ -12,25 +12,27 @@
     <div class="container">
         <h3 class="text-center"><spring:message code="meal.title"/></h3>
 
-        <form class="form-row" method="get" action="meals/filter">
-            <div class=" form-group col-sm">
-                <label><spring:message code="meal.startDate"/>:</label>
-                <input type="date" name="startDate" value="${param.startDate}">
+        <form method="get" action="meals/filter">
+            <div class="form-group row">
+                <div class="form-group col-sm">
+                    <label><spring:message code="meal.startDate"/>:</label>
+                    <input type="date" name="startDate" value="${param.startDate}">
+                </div>
+                <div class="form-group col-sm">
+                    <label><spring:message code="meal.endDate"/>:</label>
+                    <input type="date" name="endDate" value="${param.endDate}">
+                </div>
+                <div class="form-group col-sm">
+                    <label><spring:message code="meal.startTime"/>:</label>
+                    <input type="time" name="startTime" value="${param.startTime}">
+                </div>
+                <div class="form-group col-sm">
+                    <label><spring:message code="meal.endTime"/>:</label>
+                    <input type="time" name="endTime" value="${param.endTime}">
+                </div>
             </div>
-            <div class="form-group col-sm">
-                <label><spring:message code="meal.endDate"/>:</label>
-                <input type="date" name="endDate" value="${param.endDate}">
-            </div>
-            <div class="form-group col-sm">
-                <label><spring:message code="meal.startTime"/>:</label>
-                <input type="time" name="startTime" value="${param.startTime}">
-            </div>
-            <div class="form-group col-sm">
-                <label><spring:message code="meal.endTime"/>:</label>
-                <input type="time" name="endTime" value="${param.endTime}">
-            </div>
-            <div class="float-right">
-                <button class="btn btn-primary"">
+            <div class="form-group text-right">
+                <button class="btn btn-primary">
                     <spring:message code="meal.filter"/>
                 </button>
             </div>

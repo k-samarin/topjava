@@ -1,4 +1,4 @@
-const userAjaxUrl = "meals/";
+const userAjaxUrl = "ajax/meals/";
 
 const ctx = {
     ajaxUrl: userAjaxUrl
@@ -11,22 +11,13 @@ $(function () {
             "info": true,
             "columns": [
                 {
-                    "data": "dateTime",
-                    "render": function (data) {
-                        return new Date(data).toLocaleString();
-                    }
+                    "data": "dateTime"
                 },
                 {
-                    "data": "description",
-                    "render": function (data) {
-                        return new String(data);
-                    }
+                    "data": "description"
                 },
                 {
-                    "data": "calories",
-                    "render": function (data) {
-                        return new Number(data);
-                    }
+                    "data": "calories"
                 },
                 {
                     "defaultContent": "Edit",

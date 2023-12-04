@@ -55,7 +55,7 @@
             </thead>
             <c:forEach items="${requestScope.meals}" var="meal">
                 <tr id="${meal.id}" data-meal-excess="${meal.excess}">
-                    <td>${meal.dateTime}</td>
+                    <td>${fn:formatDateTime(meal.dateTime)}</td>
                     <td>${meal.description}</td>
                     <td>${meal.calories}</td>
                     <td><a><span class="fa fa-pencil"></span></a></td>

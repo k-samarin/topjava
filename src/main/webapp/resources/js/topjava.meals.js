@@ -48,3 +48,17 @@ function filterMeal(startDate, endDate, startTime, endTime) {
         ctx.datatableApi.clear().rows.add(data).draw();
     });
 }
+
+function clearFilter() {
+    const startDateInput = $('#startDate');
+    const endDateInput = $('#endDate');
+    const startTimeInput = $('#startTime');
+    const endTimeInput = $('#endTime');
+
+    startDateInput.val('');
+    endDateInput.val('');
+    startTimeInput.val('');
+    endTimeInput.val('');
+
+    filterMeal('', '', '', '');
+}

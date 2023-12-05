@@ -32,15 +32,20 @@
                     <input type="time" name="endTime" value="${param.endTime}">
                 </div>
             </div>
-            <div class="form-group text-right">
-                <button type="button" class="btn btn-primary" onclick="filterMeal(
+            <div class="row">
+                <div class="form-group col-sm text-right">
+                    <button type="button" class="btn btn-danger" onclick="clearFilter()">
+                        <spring:message code="meal.cleanFilter"/>
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="filterMeal(
                         $('input[name=startDate]').val(),
                         $('input[name=endDate]').val(),
                         $('input[name=startTime]').val(),
                         $('input[name=endTime]').val()
                     )">
-                    <spring:message code="meal.filter"/>
-                </button>
+                        <spring:message code="meal.filter"/>
+                    </button>
+                </div>
             </div>
         </form>
 

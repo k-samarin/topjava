@@ -45,3 +45,8 @@ $(function () {
         })
     );
 });
+
+function toggleUser(checkbox) {
+    const row = $(checkbox).closest('tr');
+    row.attr("data-user-enabled", checkbox.checked);
+}

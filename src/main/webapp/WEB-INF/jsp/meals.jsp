@@ -13,7 +13,7 @@
     <div class="container">
         <h3 class="text-center"><spring:message code="meal.title"/></h3>
 
-        <form method="get" action="meals/filter">
+        <form onsubmit="return false;">
             <div class="form-group row">
                 <div class="form-group col-sm">
                     <label><spring:message code="meal.startDate"/>:</label>
@@ -33,7 +33,12 @@
                 </div>
             </div>
             <div class="form-group text-right">
-                <button class="btn btn-primary">
+                <button type="button" class="btn btn-primary" onclick="filterMeal(
+                        $('input[name=startDate]').val(),
+                        $('input[name=endDate]').val(),
+                        $('input[name=startTime]').val(),
+                        $('input[name=endTime]').val()
+                    )">
                     <spring:message code="meal.filter"/>
                 </button>
             </div>
@@ -84,7 +89,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="description" class="col-form-label"><spring:message code="meal.description"/></label>
+                        <label for="description" class="col-form-label"><spring:message
+                                code="meal.description"/></label>
                         <input type="text" class="form-control" id="description" name="description"
                                placeholder="<spring:message code="meal.description"/>">
                     </div>

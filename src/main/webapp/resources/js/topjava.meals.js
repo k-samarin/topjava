@@ -6,7 +6,7 @@ const ctx = {
 
 $(function () {
     makeEditable(
-    $("#datatable").DataTable({
+        $("#datatable").DataTable({
             "paging": false,
             "info": true,
             "columns": [
@@ -37,3 +37,14 @@ $(function () {
         })
     );
 });
+
+function filterMeal(startDate, endDate, startTime, endTime) {
+    let url = ctx.ajaxUrl + "filter" +
+        "?startDate=" + encodeURIComponent(startDate) +
+        "&endDate=" + encodeURIComponent(endDate) +
+        "&startTime=" + encodeURIComponent(startTime) +
+        "&endTime=" + encodeURIComponent(endTime);
+    $.get(url, function (data) {
+        ctx.datatableApi.clear().rows.add(data).draw();
+    });
+}

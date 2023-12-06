@@ -61,4 +61,15 @@ public class AdminRestController extends AbstractUserController {
     public User getWithMeals(@PathVariable int id) {
         return super.getWithMeals(id);
     }
+
+    @PutMapping(value = "/{id}/enable", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void enable(@RequestBody EnableToggle toggle, @PathVariable int id) {
+        User user = super.get(id);
+        user.setEnabled(toggle.enabled());
+        super.update(user, id);
+    }
+
+    public record EnableToggle(boolean enabled) {
+    }
 }

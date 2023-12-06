@@ -50,15 +50,14 @@ function toggleUser(checkbox, id) {
     const row = $(checkbox).closest('tr');
     row.attr("data-user-enabled", checkbox.checked);
 
-    if (checkbox.checked) {
-        $.ajax({
-            type: 'POST',
-            url: ctx.ajaxUrl + id + "/enable"
-        });
-    } else {
-        $.ajax({
-            type: 'POST',
-            url: ctx.ajaxUrl + id + "/disable"
-        });
-    }
+    const toggle = {
+        enabled : checkbox.checked
+    };
+
+    $.ajax({
+        url: 'rest/admin/users/' +  id + '/enable',
+        method: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify(toggle),
+    });
 }

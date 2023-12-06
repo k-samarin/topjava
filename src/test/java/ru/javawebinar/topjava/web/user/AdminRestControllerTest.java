@@ -93,4 +93,27 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(USER_WITH_MEALS_MATCHER.contentJson(admin));
     }
+
+    @Test
+    void enableUser() throws Exception {
+        AdminRestController.EnableToggle toggle = new AdminRestController.EnableToggle(true);
+        perform(MockMvcRequestBuilders.put(
+                REST_URL + GUEST_ID + "/enable")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(toggle)))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+
+    }
+
+    @Test
+    void disableUser() throws Exception {
+        AdminRestController.EnableToggle toggle = new AdminRestController.EnableToggle(false);
+        perform(MockMvcRequestBuilders.put(REST_URL + GUEST_ID + "/enable")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(toggle)))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+    }
+
 }

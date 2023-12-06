@@ -66,10 +66,10 @@ public class AdminRestController extends AbstractUserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void enable(@RequestBody EnableToggle toggle, @PathVariable int id) {
         User user = super.get(id);
-        user.setEnabled(toggle.enabled());
+        user.setEnabled(toggle.enable());
         super.update(user, id);
     }
 
-    public record EnableToggle(boolean enabled) {
+    public record EnableToggle(boolean enable) {
     }
 }

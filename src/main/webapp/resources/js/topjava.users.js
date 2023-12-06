@@ -51,7 +51,7 @@ function toggleUser(checkbox, id) {
     row.attr("data-user-enabled", checkbox.checked);
 
     const toggle = {
-        enabled : checkbox.checked
+        enable : checkbox.checked
     };
 
     $.ajax({

@@ -13,23 +13,23 @@
     <div class="container">
         <h3 class="text-center"><spring:message code="meal.title"/></h3>
 
-        <form onsubmit="return false;">
+        <form>
             <div class="form-group row">
                 <div class="form-group col-sm">
                     <label><spring:message code="meal.startDate"/>:</label>
-                    <input type="date" name="startDate" value="${param.startDate}">
+                    <input type="date" name="startDate">
                 </div>
                 <div class="form-group col-sm">
                     <label><spring:message code="meal.endDate"/>:</label>
-                    <input type="date" name="endDate" value="${param.endDate}">
+                    <input type="date" name="endDate">
                 </div>
                 <div class="form-group col-sm">
                     <label><spring:message code="meal.startTime"/>:</label>
-                    <input type="time" name="startTime" value="${param.startTime}">
+                    <input type="time" name="startTime">
                 </div>
                 <div class="form-group col-sm">
                     <label><spring:message code="meal.endTime"/>:</label>
-                    <input type="time" name="endTime" value="${param.endTime}">
+                    <input type="time" name="endTime">
                 </div>
             </div>
             <div class="row">

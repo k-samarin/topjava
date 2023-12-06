@@ -49,4 +49,10 @@ public class UserTestData {
         updated.setRoles(Collections.singletonList(Role.ADMIN));
         return updated;
     }
+
+    public static User getEnabledByToggle(User user, boolean toggle) {
+        User userCopy = new User(user);
+        userCopy.setEnabled(toggle);
+        return userCopy;
+    }
 }

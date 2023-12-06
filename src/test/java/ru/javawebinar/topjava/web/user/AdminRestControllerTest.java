@@ -104,6 +104,11 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
+        perform(MockMvcRequestBuilders.get(REST_URL + GUEST_ID))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(USER_MATCHER.contentJson(getEnabledByToggle(guest, true)));
     }
 
     @Test
@@ -114,6 +119,12 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .content(JsonUtil.writeValue(toggle)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
+
+        perform(MockMvcRequestBuilders.get(REST_URL + GUEST_ID))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(USER_MATCHER.contentJson(getEnabledByToggle(guest, false)));
     }
 
 }

@@ -2,9 +2,12 @@ package ru.javawebinar.topjava.to;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.beans.ConstructorProperties;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -15,8 +18,12 @@ public class MealTo extends BaseTo {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private final LocalDateTime dateTime;
 
+    @Size(max = 100)
+    @NotNull
     private final String description;
 
+    @Range(min = 10, max = 5000, message = "Value must be between 10 and 5000 characters")
+    @NotNull
     private final int calories;
 
     @Nullable

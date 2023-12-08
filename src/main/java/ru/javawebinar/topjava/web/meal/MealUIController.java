@@ -50,7 +50,7 @@ public class MealUIController extends AbstractMealController {
             return ResponseEntity.unprocessableEntity().body(errorFieldsMsg);
         }
         if (mealTo.isNew()) {
-            super.create(mealTo)
+            super.create(mealTo);
         } else {
             super.update(mealTo);
         }

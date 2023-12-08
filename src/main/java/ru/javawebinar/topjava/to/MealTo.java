@@ -1,17 +1,25 @@
 package ru.javawebinar.topjava.to;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.Nullable;
+
 import java.beans.ConstructorProperties;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class MealTo extends BaseTo {
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private final LocalDateTime dateTime;
 
     private final String description;
 
     private final int calories;
 
+    @Nullable
     private final boolean excess;
 
     @ConstructorProperties({"id", "dateTime", "description", "calories", "excess"})

@@ -6,7 +6,7 @@ import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.beans.ConstructorProperties;
 import java.time.LocalDateTime;
@@ -16,15 +16,16 @@ public class MealTo extends BaseTo {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @NotBlank
     private final LocalDateTime dateTime;
 
     @Size(max = 100)
-    @NotNull
+    @NotBlank
     private final String description;
 
     @Range(min = 10, max = 5000, message = "Value must be between 10 and 5000 characters")
-    @NotNull
-    private final int calories;
+    @NotBlank
+    private final Integer calories;
 
     @Nullable
     private final boolean excess;

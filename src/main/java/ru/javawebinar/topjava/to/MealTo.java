@@ -16,15 +16,13 @@ public class MealTo extends BaseTo {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @NotBlank
     private final LocalDateTime dateTime;
 
-    @Size(max = 100)
     @NotBlank
+    @Size(max = 100)
     private final String description;
 
     @Range(min = 10, max = 5000, message = "Value must be between 10 and 5000 characters")
-    @NotBlank
     private final Integer calories;
 
     @Nullable

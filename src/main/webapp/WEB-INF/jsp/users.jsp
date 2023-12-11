@@ -8,7 +8,6 @@
 <body>
 <script src="resources/js/topjava.common.js" defer></script>
 <script src="resources/js/topjava.users.js" defer></script>
-<script src="resources/js/topjava.i18n.common.js" defer></script>
 <jsp:include page="fragments/bodyHeader.jsp"/>
 
 <div class="jumbotron pt-4">
@@ -80,8 +79,12 @@
 <jsp:include page="fragments/footer.jsp"/>
 </body>
 <script type="text/javascript">
-    const i18n = {}; // https://learn.javascript.ru/object
+    const i18n = {};
     i18n["addTitle"] = '<spring:message code="user.add"/>';
     i18n["editTitle"] = '<spring:message code="user.edit"/>';
+
+    <c:forEach var="key" items='${["common.deleted","common.saved","common.errorStatus","common.confirm"]}'>
+    i18n["${key}"] = "<spring:message code="${key}"/>";
+    </c:forEach>
 </script>
 </html>

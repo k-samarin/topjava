@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.beans.ConstructorProperties;
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ import java.util.Objects;
 
 public class MealTo extends BaseTo {
 
+    @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private final LocalDateTime dateTime;
@@ -22,14 +24,15 @@ public class MealTo extends BaseTo {
     @Size(max = 100)
     private final String description;
 
-    @Range(min = 10, max = 5000, message = "Value must be between 10 and 5000 characters")
+    @NotNull
+    @Range(min = 10, max = 5000, message = "Calories value must be between 10 and 5000")
     private final Integer calories;
 
     @Nullable
     private final boolean excess;
 
     @ConstructorProperties({"id", "dateTime", "description", "calories", "excess"})
-    public MealTo(Integer id, LocalDateTime dateTime, String description, int calories, boolean excess) {
+    public MealTo(Integer id, LocalDateTime dateTime, String description, Integer calories, boolean excess) {
         super(id);
         this.dateTime = dateTime;
         this.description = description;
@@ -58,9 +61,9 @@ public class MealTo extends BaseTo {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MealTo mealTo = (MealTo) o;
-        return calories == mealTo.calories &&
-                excess == mealTo.excess &&
+        return excess == mealTo.excess &&
                 Objects.equals(id, mealTo.id) &&
+                Objects.equals(calories, mealTo.calories) &&
                 Objects.equals(dateTime, mealTo.dateTime) &&
                 Objects.equals(description, mealTo.description);
     }

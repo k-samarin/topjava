@@ -79,10 +79,9 @@
 <jsp:include page="fragments/footer.jsp"/>
 </body>
 <script type="text/javascript">
-    const i18n = {};
     i18n["addTitle"] = '<spring:message code="user.add"/>';
     i18n["editTitle"] = '<spring:message code="user.edit"/>';
 
-    <%@ include file="i18n.common.init.jsp" %>
+    <%@ include file="fragments/i18n.common.init.jsp" %>
 </script>
 </html>

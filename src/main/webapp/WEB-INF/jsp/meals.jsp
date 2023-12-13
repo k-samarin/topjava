@@ -5,6 +5,13 @@
 <html>
 <jsp:include page="fragments/headTag.jsp"/>
 <body>
+<spring:message code="meal.add" var="addTitle"/>
+<spring:message code="meal.edit" var="editTitle"/>
+<jsp:include page="fragments/i18n.common.init.jsp">
+    <jsp:param name="addTitle" value="${addTitle}"/>
+    <jsp:param name="editTitle" value="${editTitle}" />
+</jsp:include>
+
 <script src="resources/js/topjava.common.js" defer></script>
 <script src="resources/js/topjava.meals.js" defer></script>
 <jsp:include page="fragments/bodyHeader.jsp"/>
@@ -111,11 +118,4 @@
 </div>
 <jsp:include page="fragments/footer.jsp"/>
 </body>
-<script type="text/javascript">
-    const i18n = {}; // https://learn.javascript.ru/object
-    i18n["addTitle"] = '<spring:message code="meal.add"/>';
-    i18n["editTitle"] = '<spring:message code="meal.edit"/>';
-
-    <%@ include file="i18n.common.init.jsp" %>
-</script>
 </html>

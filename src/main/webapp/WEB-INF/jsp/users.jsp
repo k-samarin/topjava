@@ -6,6 +6,13 @@
 <html>
 <jsp:include page="fragments/headTag.jsp"/>
 <body>
+<spring:message code="user.add" var="addTitle"/>
+<spring:message code="user.edit" var="editTitle"/>
+<jsp:include page="fragments/i18n.common.init.jsp">
+    <jsp:param name="addTitle" value="${addTitle}"/>
+    <jsp:param name="editTitle" value="${editTitle}" />
+</jsp:include>
+
 <script src="resources/js/topjava.common.js" defer></script>
 <script src="resources/js/topjava.users.js" defer></script>
 <jsp:include page="fragments/bodyHeader.jsp"/>
@@ -78,10 +85,4 @@
 </div>
 <jsp:include page="fragments/footer.jsp"/>
 </body>
-<script type="text/javascript">
-    i18n["addTitle"] = '<spring:message code="user.add"/>';
-    i18n["editTitle"] = '<spring:message code="user.edit"/>';
-
-    <%@ include file="fragments/i18n.common.init.jsp" %>
-</script>
 </html>

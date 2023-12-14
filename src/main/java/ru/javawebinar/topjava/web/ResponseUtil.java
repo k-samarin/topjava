@@ -10,7 +10,7 @@ public class ResponseUtil {
     private ResponseUtil() {
     }
 
-    public static ResponseEntity<String> getErrorResponseBody(BindingResult result) {
+    public static ResponseEntity<String> getErrorResponse(BindingResult result) {
         return ResponseEntity.unprocessableEntity().body(
                 result.getFieldErrors().stream()
                         .map(fe -> String.format("[%s] %s", fe.getField(), fe.getDefaultMessage()))

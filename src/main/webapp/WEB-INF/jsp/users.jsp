@@ -6,11 +6,9 @@
 <html>
 <jsp:include page="fragments/headTag.jsp"/>
 <body>
-<spring:message code="user.add" var="addTitle"/>
-<spring:message code="user.edit" var="editTitle"/>
-<jsp:include page="fragments/i18n.common.init.jsp">
-    <jsp:param name="addTitle" value="${addTitle}"/>
-    <jsp:param name="editTitle" value="${editTitle}" />
+<jsp:include page="fragments/i18n.jsp">
+    <jsp:param name="addTitle" value="user.add"/>
+    <jsp:param name="editTitle" value="user.edit" />
 </jsp:include>
 
 <script src="resources/js/topjava.common.js" defer></script>

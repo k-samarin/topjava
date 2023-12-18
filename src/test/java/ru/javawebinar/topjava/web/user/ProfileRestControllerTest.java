@@ -65,6 +65,67 @@ class ProfileRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void validateRegisterWithEmptyName() throws Exception {
+        UserTo newTo = new UserTo(null, "", "newemail@ya.ru", "newPassword", 1500);
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newTo)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void validateRegisterWithNullName() throws Exception {
+        UserTo newTo = new UserTo(null, "", "newemail@ya.ru", "newPassword", 1500);
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newTo)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void validateRegisterWithEmptyEmail() throws Exception {
+        UserTo newTo = new UserTo(null, "newName", "", "newPassword", 1500);
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newTo)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void validateRegisterWithNullEmail() throws Exception {
+        UserTo newTo = new UserTo(null, "newName", null, "", 1500);
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newTo)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void validateRegisterWithShortPassword() throws Exception {
+        UserTo newTo = new UserTo(null, "newName", "newemail@ya.ru", "1234", 1500);
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newTo)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void validateRegisterWithlongPassword() throws Exception {
+        UserTo newTo = new UserTo(null, "newName", "newemail@ya.ru",
+                "123456789013245678901234567890123", 1500);
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newTo)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
     void update() throws Exception {
         UserTo updatedTo = new UserTo(null, "newName", "user@yandex.ru", "newPassword", 1500);
         perform(MockMvcRequestBuilders.put(REST_URL).contentType(MediaType.APPLICATION_JSON)
